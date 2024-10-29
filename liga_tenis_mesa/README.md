@@ -10,3 +10,7 @@
 ## Step 3: Flask Server Setup
 - Created Flask server in `app.py` and connected to Firebase.
 - Verified server setup with a test route at the root URL.
+
+## Step 4: Firebase Authentication Setup
+- Added routes for user registration (`/register`) and login (`/login`) with Firebase Authentication.
+- Verified both routes using Postman to ensure successful responses and error handling.
