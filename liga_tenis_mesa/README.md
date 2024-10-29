@@ -6,3 +6,7 @@
 ## Step 2: Backend Initial Setup
 - Created virtual environment in `backend` and installed initial dependencies (Flask, Pyrebase).
 - Added `app.py` and `config.py` for Flask server entry point and Firebase configuration.
+
+## Step 3: Flask Server Setup
+- Created Flask server in `app.py` and connected to Firebase.
+- Verified server setup with a test route at the root URL.
