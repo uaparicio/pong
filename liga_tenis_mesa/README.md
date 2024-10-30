@@ -14,3 +14,7 @@
 ## Step 4: Firebase Authentication Setup
 - Added routes for user registration (`/register`) and login (`/login`) with Firebase Authentication.
 - Verified both routes using Postman to ensure successful responses and error handling.
+
+## Step 5: Firebase Database and Access Setup
+- Configured Firebase Firestore database with collections for `users`, `teams`, `matches`, and `logs`.
+- Added Firebase credentials in `config.py` and `firebase_credentials.json` for secure access.
