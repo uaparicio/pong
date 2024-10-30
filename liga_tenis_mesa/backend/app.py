@@ -117,6 +117,57 @@ def create_team():
         return jsonify({"message": "Team created successfully", "team_data": team_data}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route("/create-match", methods=["POST"])
+@role_required("admin")
+def create_match():
+    team1 = request.json.get("team1")
+    team2 = request.json.get("team2")
+    date = request.json.get("date")  # Fecha del partido en formato ISO
+
+    if not team1 or not team2 or not date:
+        return jsonify({"error": "Both teams and a date are required"}), 400
+
+    try:
+        # Verificar que los equipos existan
+        team1_ref = db.collection("teams").document(team1)
+        team2_ref = db.collection("teams").document(team2)
+        if not team1_ref.get().exists or not team2_ref.get().exists:
+            return jsonify({"error": "One or both teams do not exist"}), 404
+
+        # Crear el partido en Firestore
+        match_data = {
+            "team1": team1,
+            "team2": team2,
+            "date": date,
+            "result": None  # El resultado se actualizará después del partido
+        }
+        match_ref = db.collection("matches").add(match_data)
+        return jsonify({"message": "Match created successfully", "match_id": match_ref[1].id}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/record-result", methods=["POST"])
+@role_required("admin")
+def record_result():
+    match_id = request.json.get("match_id")
+    result = request.json.get("result")  # Resultado en formato de string o JSON detallado
+
+    if not match_id or not result:
+        return jsonify({"error": "Match ID and result are required"}), 400
+
+    try:
+        # Obtener referencia del partido
+        match_ref = db.collection("matches").document(match_id)
+        if not match_ref.get().exists:
+            return jsonify({"error": "Match not found"}), 404
+
+        # Actualizar el resultado del partido
+        match_ref.update({"result": result})
+        return jsonify({"message": "Result recorded successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 
 if __name__ == "__main__":

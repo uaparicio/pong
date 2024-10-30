@@ -39,3 +39,8 @@
 ## Step 10: Team Management
 - Added `/create-team` endpoint for admins to create teams with exactly four players.
 - Verified team data is stored correctly in Firestore under the `teams` collection.
+
+## Step 11: Match Management
+- Added `/create-match` endpoint for scheduling matches between teams.
+- Added `/record-result` endpoint for recording match results.
+- Verified match creation and result recording in Firestore.
