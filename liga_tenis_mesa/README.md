@@ -27,3 +27,6 @@
 - Updated `/register` endpoint to store user data in Firestore.
 - Verified successful registration and data storage in the `users` collection.
 
+## Step 8: User Login with Firestore Verification
+- Updated `/login` endpoint to authenticate users and verify data existence in Firestore.
+- Verified successful login and data retrieval from `users` collection in Firestore.

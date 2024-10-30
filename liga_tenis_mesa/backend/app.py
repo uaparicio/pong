@@ -36,16 +36,27 @@ def register():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-
 @app.route("/login", methods=["POST"])
 def login():
     email = request.json.get("email")
     password = request.json.get("password")
     try:
+        # Autenticar usuario en Firebase Authentication
         user = auth.sign_in_with_email_and_password(email, password)
-        return jsonify({"message": "Login successful", "user_id": user["localId"], "idToken": user["idToken"]}), 200
+        user_id = user["localId"]
+        id_token = user["idToken"]
+
+        # Verificar que el usuario exista en Firestore
+        doc_ref = db.collection("users").document(user_id)
+        doc = doc_ref.get()
+        if doc.exists:
+            user_data = doc.to_dict()
+            return jsonify({"message": "Login successful", "user_data": user_data, "idToken": id_token}), 200
+        else:
+            return jsonify({"error": "User not found in Firestore"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)
