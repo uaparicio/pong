@@ -4,6 +4,7 @@ import pyrebase
 import firebase_admin 
 from firebase_admin import credentials, firestore
 from functools import wraps
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -90,10 +91,33 @@ def login():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
     
-@app.route("/admin-only", methods=["GET"])
+
+@app.route("/create-team", methods=["POST"])
 @role_required("admin")
-def admin_only():
-    return jsonify({"message": "Access granted to admin!"}), 200
+def create_team():
+    team_name = request.json.get("team_name")
+    players = request.json.get("players")  # Esperamos un array con los datos de los jugadores
+
+    if not team_name or not players or len(players) != 4:
+        return jsonify({"error": "Team name and exactly four players are required"}), 400
+
+    try:
+        # Verificar si el equipo ya existe
+        team_ref = db.collection("teams").document(team_name)
+        if team_ref.get().exists:
+            return jsonify({"error": "Team with this name already exists"}), 400
+
+        # Estructura del equipo
+        team_data = {
+            "team_name": team_name,
+            "players": players,
+            "created_at": datetime.now().isoformat()  # Utiliza un string de timestamp en formato ISO
+        }
+        team_ref.set(team_data)
+        return jsonify({"message": "Team created successfully", "team_data": team_data}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

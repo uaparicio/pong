@@ -35,3 +35,7 @@
 - Added `role` field to user data in Firestore for role-based access control.
 - Created decorator to enforce role restrictions on protected routes.
 - Verified role-based access to `admin-only` route.
+
+## Step 10: Team Management
+- Added `/create-team` endpoint for admins to create teams with exactly four players.
+- Verified team data is stored correctly in Firestore under the `teams` collection.
