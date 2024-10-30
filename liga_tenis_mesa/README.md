@@ -18,3 +18,7 @@
 ## Step 5: Firebase Database and Access Setup
 - Configured Firebase Firestore database with collections for `users`, `teams`, `matches`, and `logs`.
 - Added Firebase credentials in `config.py` and `firebase_credentials.json` for secure access.
+
+## Step 6: Firestore Connection Setup
+- Configured Firebase Admin SDK to connect to Firestore.
+- Added `/test-firestore` route to verify Firestore connection with a sample document.

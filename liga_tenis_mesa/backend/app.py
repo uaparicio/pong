@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from config import firebaseConfig
 import pyrebase
+import firebase_admin 
+from firebase_admin import credentials, firestore
 
 app = Flask(__name__)
 
@@ -8,9 +10,27 @@ app = Flask(__name__)
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 
-@app.route("/test", methods=["GET"])
-def test():
-    return "Test endpoint is working!"
+cred = credentials.Certificate("firebase_credentials.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
+@app.route("/test-firestore", methods=["GET"])
+def test_firestore():
+    try:
+        # Agregar un documento de prueba en Firestore
+        doc_ref = db.collection("testCollection").document("testDocument")
+        doc_ref.set({"message": "Firestore connection successful!"})
+
+        # Leer el documento de prueba
+        doc = doc_ref.get()
+        if doc.exists:
+            return jsonify(doc.to_dict()), 200
+        else:
+            return jsonify({"error": "Document does not exist"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 
 @app.route("/register", methods=["POST"])
 def register():
