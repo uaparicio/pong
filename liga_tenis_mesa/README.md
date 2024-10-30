@@ -44,3 +44,12 @@
 - Added `/create-match` endpoint for scheduling matches between teams.
 - Added `/record-result` endpoint for recording match results.
 - Verified match creation and result recording in Firestore.
+
+## Step 12: Report Generation
+- Added `/generate-report` endpoint for admins to view summary statistics of matches.
+- Reports include games played, wins, and losses per team.
+- Verified report generation with match data from Firestore.
+
+## Step 13: PDF Report Export
+- Added `/export-report-pdf` endpoint for exporting team statistics report as a PDF.
+- Verified PDF file generation and download functionality for admins.

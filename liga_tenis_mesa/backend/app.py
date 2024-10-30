@@ -1,10 +1,13 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from config import firebaseConfig
 import pyrebase
 import firebase_admin 
 from firebase_admin import credentials, firestore
 from functools import wraps
 from datetime import datetime
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import os
 
 app = Flask(__name__)
 
@@ -216,6 +219,64 @@ def generate_report():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+@app.route("/export-report-pdf", methods=["GET"])
+@role_required("admin")
+def export_report_pdf():
+    try:
+        # Generar estadísticas
+        matches = db.collection("matches").stream()
+        stats = {}
+
+        for match in matches:
+            match_data = match.to_dict()
+            team1 = match_data.get("team1")
+            team2 = match_data.get("team2")
+            result = match_data.get("result")
+
+            if not team1 or not team2:
+                continue
+
+            if team1 not in stats:
+                stats[team1] = {"games_played": 0, "wins": 0, "losses": 0}
+            if team2 not in stats:
+                stats[team2] = {"games_played": 0, "wins": 0, "losses": 0}
+
+            if result:
+                team1_score = result.get("team1_score", 0)
+                team2_score = result.get("team2_score", 0)
+                stats[team1]["games_played"] += 1
+                stats[team2]["games_played"] += 1
+
+                if team1_score > team2_score:
+                    stats[team1]["wins"] += 1
+                    stats[team2]["losses"] += 1
+                elif team2_score > team1_score:
+                    stats[team2]["wins"] += 1
+                    stats[team1]["losses"] += 1
+
+        # Crear PDF
+        pdf_path = "report.pdf"
+        c = canvas.Canvas(pdf_path, pagesize=letter)
+        c.drawString(100, 750, "Team Statistics Report")
+
+        y_position = 700
+        for team, stat in stats.items():
+            c.drawString(100, y_position, f"Team: {team}")
+            c.drawString(150, y_position - 20, f"Games Played: {stat['games_played']}")
+            c.drawString(150, y_position - 40, f"Wins: {stat['wins']}")
+            c.drawString(150, y_position - 60, f"Losses: {stat['losses']}")
+            y_position -= 80
+
+        c.save()
+
+        # Enviar PDF como archivo descargable
+        return send_file(pdf_path, as_attachment=True)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        if os.path.exists(pdf_path):
+            os.remove(pdf_path)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)
