@@ -22,3 +22,8 @@
 ## Step 6: Firestore Connection Setup
 - Configured Firebase Admin SDK to connect to Firestore.
 - Added `/test-firestore` route to verify Firestore connection with a sample document.
+
+## Step 7: User Registration in Firestore
+- Updated `/register` endpoint to store user data in Firestore.
+- Verified successful registration and data storage in the `users` collection.
+
