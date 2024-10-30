@@ -169,6 +169,53 @@ def record_result():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/generate-report", methods=["GET"])
+@role_required("admin")
+def generate_report():
+    try:
+        # Obtener todos los partidos de Firestore
+        matches = db.collection("matches").stream()
+
+        # Diccionario para almacenar estadísticas de cada equipo
+        stats = {}
+
+        for match in matches:
+            match_data = match.to_dict()
+            team1 = match_data.get("team1")
+            team2 = match_data.get("team2")
+            result = match_data.get("result")
+
+            # Continuar solo si ambos equipos están definidos
+            if not team1 or not team2:
+                continue
+
+            # Inicializar estadísticas para los equipos si no existen
+            if team1 not in stats:
+                stats[team1] = {"games_played": 0, "wins": 0, "losses": 0}
+            if team2 not in stats:
+                stats[team2] = {"games_played": 0, "wins": 0, "losses": 0}
+
+            # Actualizar estadísticas solo si hay resultado
+            if result:
+                team1_score = result.get("team1_score", 0)
+                team2_score = result.get("team2_score", 0)
+
+                # Incrementar partidos jugados
+                stats[team1]["games_played"] += 1
+                stats[team2]["games_played"] += 1
+
+                # Determinar ganador y actualizar conteo de victorias y derrotas
+                if team1_score > team2_score:
+                    stats[team1]["wins"] += 1
+                    stats[team2]["losses"] += 1
+                elif team2_score > team1_score:
+                    stats[team2]["wins"] += 1
+                    stats[team1]["losses"] += 1
+
+        return jsonify({"report": stats}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)
