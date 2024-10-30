@@ -30,3 +30,8 @@
 ## Step 8: User Login with Firestore Verification
 - Updated `/login` endpoint to authenticate users and verify data existence in Firestore.
 - Verified successful login and data retrieval from `users` collection in Firestore.
+
+## Step 9: Roles and Permissions
+- Added `role` field to user data in Firestore for role-based access control.
+- Created decorator to enforce role restrictions on protected routes.
+- Verified role-based access to `admin-only` route.
