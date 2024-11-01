@@ -179,7 +179,7 @@
             players.forEach(player => {
                 const option = document.createElement('option');
                 option.value = player.Nombre;
-                option.textContent = player.Nombre;
+                option.textContent = `(${player.cat}ta) ${player.Nombre}`;
                 option.dataset.category = player.cat;
                 select.appendChild(option);
             });
