@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liga lujanina de tenis de mesa - Validador de equipos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 90%;
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #006400;
+            font-size: 1.5em;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 1.2em;
+            margin-top: 5px;
+            font-weight: normal;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .category-cell {
+            background-color: #eee;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            font-size: 1em;
+        }
+
+        .team-status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        #status {
+            font-size: 1.1em;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .valid {
+            color: #006400;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+
+        .invalid {
+            color: #8b0000;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+
+        #message {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #555;
+            text-align: left;
+        }
+
+        .sum-category {
+            font-size: 1em;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Liga lujanina de tenis de mesa</h1>
+    <h2>Validador de equipos</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Jugador</th>
+                <th>Categoría</th>
+            </tr>
+        </thead>
+        <tbody id="team-table">
+            <tr>
+                <td><select class="player-select" onchange="updateTeam()"><option value="">Seleccionar jugador</option></select></td>
+                <td class="category-cell"></td>
+            </tr>
+            <tr>
+                <td><select class="player-select" onchange="updateTeam()"><option value="">Seleccionar jugador</option></select></td>
+                <td class="category-cell"></td>
+            </tr>
+            <tr>
+                <td><select class="player-select" onchange="updateTeam()"><option value="">Seleccionar jugador</option></select></td>
+                <td class="category-cell"></td>
+            </tr>
+            <tr>
+                <td><select class="player-select" onchange="updateTeam()"><option value="">Seleccionar jugador</option></select></td>
+                <td class="category-cell"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="sum-category">Suma de Categorías: <span id="category-sum">0</span></div>
+
+    <div class="team-status">
+        <div id="status" class="valid">✅ Equipo Permitido</div>
+        <div id="message"></div>
+    </div>
+</div>
+
+<script>
+    const players = [
+        { "Nombre": "Renzo Agüero", "cat": "1" },
+        { "Nombre": "Agustín Dominguez", "cat": "1" },
+        { "Nombre": "Pablo Solorza", "cat": "1" },
+        { "Nombre": "Luciano Azeglio", "cat": "2" },
+        { "Nombre": "Ignacio Valdivia", "cat": "2" },
+        { "Nombre": "Benjamín Gil", "cat": "3" },
+        { "Nombre": "Ulises Aparicio", "cat": "3" },
+        { "Nombre": "Daniel Azeglio", "cat": "3" },
+        { "Nombre": "Darío Salcedo", "cat": "3" },
+        { "Nombre": "Diego Mideo", "cat": "4" },
+        { "Nombre": "Agustín Mando", "cat": "4" },
+        { "Nombre": "Alberto Furlotti", "cat": "4" },
+        { "Nombre": "Alejandro Iglesias", "cat": "4" },
+        { "Nombre": "Jorge Cirella", "cat": "4" },
+        { "Nombre": "Claudio Wengorra", "cat": "5" },
+        { "Nombre": "José Bustarack", "cat": "5" },
+        { "Nombre": "Jorge Mayer", "cat": "5" },
+        { "Nombre": "Sergio Nieva", "cat": "5" },
+        { "Nombre": "Chalo Gallegos", "cat": "6" },
+        { "Nombre": "Daniel Balmaceda", "cat": "6" }
+    ];
+
+    const playerSelects = document.querySelectorAll('.player-select');
+    const categoryCells = document.querySelectorAll('.category-cell');
+    const statusDiv = document.getElementById('status');
+    const messageDiv = document.getElementById('message');
+    const categorySumDisplay = document.getElementById('category-sum');
+
+    function populateDropdowns() {
+        playerSelects.forEach(select => {
+            players.forEach(player => {
+                const option = document.createElement('option');
+                option.value = player.Nombre;
+                option.textContent = player.Nombre;
+                option.dataset.category = player.cat;
+                select.appendChild(option);
+            });
+        });
+    }
+
+    function updateTeam() {
+        let selectedPlayers = [];
+        let selectedCategories = [];
+        let totalCategorySum = 0;
+        let categoryCounts = { "1": 0, "2": 0 };
+
+        playerSelects.forEach((select, index) => {
+            const selectedPlayer = select.value;
+            if (selectedPlayer) {
+                const player = players.find(p => p.Nombre === selectedPlayer);
+                const category = parseInt(player.cat);
+
+                selectedPlayers.push(selectedPlayer);
+                selectedCategories.push(category);
+                totalCategorySum += category;
+
+                if (category === 1 || category === 2) {
+                    categoryCounts[player.cat]++;
+                }
+                categoryCells[index].textContent = player.cat;
+            } else {
+                categoryCells[index].textContent = '';
+            }
+        });
+
+        categorySumDisplay.textContent = totalCategorySum;
+
+        if (selectedPlayers.length === 4) {
+            validateTeam(selectedPlayers, categoryCounts, totalCategorySum);
+        } else {
+            statusDiv.textContent = "";
+            statusDiv.className = "";
+            messageDiv.textContent = "";
+        }
+    }
+
+    function validateTeam(selectedPlayers, categoryCounts, totalCategorySum) {
+        let errors = [];
+
+        // Rule 1: No duplicate players
+        if (new Set(selectedPlayers).size !== selectedPlayers.length) {
+            errors.push("🚫 No debe haber jugadores repetidos.");
+        }
+
+        // Rule 2: No more than one player of category 1 or 2
+        if (categoryCounts["1"] > 1 || categoryCounts["2"] > 1 || (categoryCounts["1"] > 0 && categoryCounts["2"] > 0)) {
+            errors.push("🚫 No debe haber más de un jugador de categoría 1 o 2.");
+        }
+
+        // Rule 3: Total category sum should be at least 14
+        if (totalCategorySum < 14) {
+            errors.push("🚫 La suma de las categorías no debe ser menor a 14.");
+        }
+
+        // Display result
+        if (errors.length === 0) {
+            statusDiv.textContent = "✅ Equipo Permitido";
+            statusDiv.className = "valid";
+            messageDiv.textContent = "";
+        } else {
+            statusDiv.textContent = "❌ Equipo no permitido";
+            statusDiv.className = "invalid";
+            messageDiv.innerHTML = errors.join("<br>");
+        }
+    }
+
+    populateDropdowns();
+</script>
+
+</body>
+</html>
