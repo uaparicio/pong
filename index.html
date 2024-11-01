@@ -175,16 +175,34 @@
     const categorySumDisplay = document.getElementById('category-sum');
 
     function populateDropdowns() {
-        playerSelects.forEach(select => {
-            players.forEach(player => {
-                const option = document.createElement('option');
-                option.value = player.Nombre;
-                option.textContent = `(${player.cat}ta) ${player.Nombre}`;
-                option.dataset.category = player.cat;
-                select.appendChild(option);
-            });
+    playerSelects.forEach(select => {
+        players.forEach(player => {
+            const option = document.createElement('option');
+            option.value = player.Nombre;
+            
+            // Determinar el sufijo según la categoría
+            let suffix;
+            switch (player.cat) {
+                case "1":
+                    suffix = "ra";
+                    break;
+                case "2":
+                    suffix = "da";
+                    break;
+                case "3":
+                    suffix = "ra";
+                    break;
+                default:
+                    suffix = "ta";
+            }
+            
+            option.textContent = `(${player.cat}${suffix}) ${player.Nombre}`;
+            option.dataset.category = player.cat;
+            select.appendChild(option);
         });
-    }
+    });
+}
+
 
     function updateTeam() {
         let selectedPlayers = [];
