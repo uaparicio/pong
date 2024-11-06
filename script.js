@@ -230,7 +230,7 @@ function crearColumnaJugador(jugador, partidoId, equipo) {
     const inputs = [];
     for (let i = 1; i <= 5; i++) {
         const input = document.createElement("input");
-        input.type = "text";
+        input.type = "number";
         input.id = `${partidoId}_${equipo}_set${i}`;
         input.placeholder = `Set ${i}`;
         input.onblur = () => calcularTotal(partidoId);
@@ -247,7 +247,7 @@ function crearColumnaJugador(jugador, partidoId, equipo) {
     }
 
     const total = document.createElement("input");
-    total.type = "text";
+    total.type = "number";
     total.id = `${partidoId}_${equipo}_total`;
     total.placeholder = "Total";
     total.readOnly = true;
