@@ -1,0 +1,40 @@
+{
+    "equipos": [
+        {
+            "nombre": "De todo un poco",
+            "jugadores": [
+                { "nombre": "Azeglio, Luciano", "pareja": "Wengorra, Claudio" },
+                { "nombre": "Wengorra, Claudio", "pareja": "Azeglio, Luciano" },
+                { "nombre": "Cirella, Jorge", "pareja": "Azeglio, Daniel" },
+                { "nombre": "Azeglio, Daniel", "pareja": "Cirella, Jorge" }
+            ]
+        },
+        {
+            "nombre": "Aura TDM",
+            "jugadores": [
+                { "nombre": "Balmaceda, Daniel", "pareja": "Agüero, Renzo" },
+                { "nombre": "Agüero, Renzo", "pareja": "Balmaceda, Daniel" },
+                { "nombre": "Gil Lemos, Benjamín", "pareja": "Iglesias, Alejandro" },
+                { "nombre": "Iglesias, Alejandro", "pareja": "Gil Lemos, Benjamín" }
+            ]
+        },
+        {
+            "nombre": "El Gran Equipo ",
+            "jugadores": [
+                { "nombre": "Solorza, Pablo", "pareja": "Bustarack, José" },
+                { "nombre": "Bustarack, José", "pareja": "Solorza, Pablo" },
+                { "nombre": "Furlotti, Alberto", "pareja": "Mideo, Diego" },
+                { "nombre": "Mideo, Diego", "pareja": "Furlotti, Alberto" }
+            ]
+        },
+        {
+            "nombre": "Los Ping Pro",
+            "jugadores": [
+                { "nombre": "Aparicio, Ulises", "pareja": "Mayer, Jorge" },
+                { "nombre": "Mayer, Jorge", "pareja": "Aparicio, Ulises" },
+                { "nombre": "Nieva, Sergio", "pareja": "Valdivia, Ignacio" },
+                { "nombre": "Valdivia, Ignacio", "pareja": "Nieva, Sergio" }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,79 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+h1, h2 {
+    color: #333;
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.partido {
+    width: 100%;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.partido h2 {
+    font-size: 0.8em;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.jugador-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+.jugador-columnas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    width: 45%;
+}
+.jugador-columnas label {
+    font-size: 0.8em;
+    text-align: center;
+}
+.jugador-columnas input[type="text"] {
+    width: 50px;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.jugador-columnas input[readonly] {
+    background-color: #e9ecef;
+    color: #333;
+}
+input:disabled {
+    background-color: #f8f9fa;
+}
+.contador {
+    font-size: 1.2em;
+    margin: 10px 0;
+    text-align: center;
+}
+
+#generatePDF #finalizarPlanilla {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #FF5722;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#generatePDF:hover #finalizarPlanilla:hover {
+    background-color: #e64a19;
+}
