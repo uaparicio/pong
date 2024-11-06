@@ -179,11 +179,6 @@ function mostrarPartidos() {
         jugadorContainer.appendChild(jugador2Column);
         partidoDiv.appendChild(jugadorContainer);
         partidosContainer.appendChild(partidoDiv);
-
-        for (let i = 0; i < 5; i++) {
-            jugador1Inputs[i].tabIndex = i * 2 + 1;
-            jugador2Inputs[i].tabIndex = i * 2 + 2;
-        }
     });
 
     document.getElementById("finalizarPlanilla").style.display = "block";

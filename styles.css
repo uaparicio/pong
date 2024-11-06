@@ -95,7 +95,7 @@ input:disabled {
     margin: 20px auto;
     padding: 10px 20px;
     font-size: 1em;
-    background-color: #FF5722;
+    background-color: #2243ff;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -104,5 +104,23 @@ input:disabled {
 }
 
 .button-style:hover {
+    background-color: #435ef9;
+}
+
+.button-warning {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #FF5722;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button-warning:hover {
     background-color: #e64a19;
 }
+
