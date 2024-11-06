@@ -70,6 +70,13 @@ window.onload = function() {
     }
 };
 
+function reiniciarAplicacion() {
+    const confirmacion = confirm("¿Estás seguro que querés reiniciar? Esto borrará los puntos cargados hasta ahora.");
+    if (confirmacion) {
+        localStorage.clear(); // Borrar el localStorage
+        location.reload();    // Recargar la página
+    }
+}
 
 function calcularTotalesAutomaticamente() {
     const partidos = document.querySelectorAll(".partido");
@@ -133,6 +140,7 @@ function mostrarPartidos() {
 
     if (!equipo1 || !equipo2 || equipo1 === equipo2) {
         alert("Selecciona equipos diferentes.");
+        localStorage.clear(); // Limpiar el localStorage si los equipos son iguales
         return;
     }
 
@@ -179,10 +187,12 @@ function mostrarPartidos() {
     });
 
     document.getElementById("finalizarPlanilla").style.display = "block";
+    document.getElementById("reiniciarAppButton").style.display = "block";
 
     // Ocultar los dropdowns, el botón y los contadores de puntos
     document.getElementById("equipo1").style.display = "none";
     document.getElementById("equipo2").style.display = "none";
+    document.getElementById("generarCrucesButton").style.display = "none";
     document.querySelector(".team-selection button").style.display = "none";
     document.getElementById("contadorEquipo1").style.display = "none";
     document.getElementById("contadorEquipo2").style.display = "none";

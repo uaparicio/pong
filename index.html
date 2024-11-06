@@ -12,29 +12,35 @@
 <body>
     <div class="header">
         <h1>Liga de Tenis de Mesa</h1>
-
+    
         <div class="team-selection">
-            <div>
+            <div id="equipo1-container">
                 <label for="equipo1"></label>
                 <select id="equipo1"></select>
-                <span id="contadorEquipo1"> Puntos: 0</span>
+                <span id="contadorEquipo1"></span>
             </div>
-            <div>
+            <div id="equipo2-container">
                 <label for="equipo2"></label>
                 <select id="equipo2"></select>
-                <span id="contadorEquipo2">Puntos: 0</span>
+                <span id="contadorEquipo2"></span>
             </div>
-            <button onclick="mostrarPartidos()">Generar cruces</button>
         </div>
+    
+        <!-- Botón centrado para generar cruces -->
+        <button id="generarCrucesButton" class="button-style" onclick="mostrarPartidos()">Generar cruces</button>
     </div>
+    
 
     <div id="partidos" class="container"></div>
 
     <!-- Botón para finalizar la planilla (inicialmente oculto) -->
-    <button id="finalizarPlanilla" style="display: none;" onclick="finalizarPlanilla()">Finalizar planilla</button>
+    <button id="finalizarPlanilla" class="button-style" style="display: none;" onclick="finalizarPlanilla()">Finalizar planilla</button>
+    <!-- Botón para reiniciar la aplicación -->
+    <button id="reiniciarAppButton" class="button-style" style="display: none;" onclick="reiniciarAplicacion()">Reiniciar aplicación</button>
+
 
     <!-- Botón para descargar y enviar resultados (inicialmente oculto) -->
-    <button id="generatePDF" style="display: none;" onclick="generarPDF()">Descargar y enviar resultados</button>
+    <button id="generatePDF" class="button-style" style="display: none;" onclick="generarPDF()">Descargar y enviar resultados</button>
 
     <script src="script.js"></script>
 </body>
