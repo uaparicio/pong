@@ -124,3 +124,70 @@ input:disabled {
     background-color: #e64a19;
 }
 
+/* Estilos para el popup modal */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+}
+
+#popupCloseButton {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #FF5722;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#popupCloseButton:hover {
+    background-color: #e64a19;
+}
+
+#confirmPopupYes,
+#confirmPopupNo {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#confirmPopupYes {
+    background-color: #FF5722;
+    margin-right: 10px;
+}
+
+#confirmPopupNo {
+    background-color: #ccc;
+}
+
+#confirmPopupYes:hover {
+    background-color: #e64a19;
+}
+
+#confirmPopupNo:hover {
+    background-color: #bbb;
+}

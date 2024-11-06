@@ -71,11 +71,7 @@ window.onload = function() {
 };
 
 function reiniciarAplicacion() {
-    const confirmacion = confirm("¿Estás seguro que querés reiniciar? Esto borrará los puntos cargados hasta ahora.");
-    if (confirmacion) {
-        localStorage.clear(); // Borrar el localStorage
-        location.reload();    // Recargar la página
-    }
+    showConfirmPopup();
 }
 
 function calcularTotalesAutomaticamente() {
@@ -139,7 +135,7 @@ function mostrarPartidos() {
     const equipo2 = equiposJSON.equipos.find(e => e.nombre === nombreEquipo2);
 
     if (!equipo1 || !equipo2 || equipo1 === equipo2) {
-        alert("Selecciona equipos diferentes.");
+        showPopup("Selecciona equipos diferentes.");
         localStorage.clear(); // Limpiar el localStorage si los equipos son iguales
         return;
     }
@@ -215,7 +211,7 @@ function finalizarPlanilla() {
         document.getElementById("generatePDF").style.display = "block";
     } else {
         // Si falta algún resultado, muestra una alerta
-        alert("Aún hay partidos sin un resultado final.");
+        showPopup("Aún hay partidos sin un resultado final.");
     }
 }
 
@@ -428,6 +424,30 @@ function generarPDF() {
     window.open(whatsappLink, "_blank");
 
     // Limpiar el localStorage y reiniciar la página
+    localStorage.clear();
+    location.reload();
+}
+
+// Función para mostrar el popup con un mensaje
+function showPopup(message) {
+    document.getElementById("popupMessage").innerText = message;
+    document.getElementById("popupModal").style.display = "flex";
+}
+
+// Función para cerrar el popup
+function closePopup() {
+    document.getElementById("popupModal").style.display = "none";
+}
+
+function showConfirmPopup() {
+    document.getElementById("confirmPopupModal").style.display = "flex";
+}
+
+function closeConfirmPopup() {
+    document.getElementById("confirmPopupModal").style.display = "none";
+}
+
+function confirmReiniciarAplicacion() {
     localStorage.clear();
     location.reload();
 }

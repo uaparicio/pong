@@ -10,6 +10,22 @@
 
 </head>
 <body>
+    
+    <div id="popupModal" class="modal">
+        <div class="modal-content">
+            <p id="popupMessage"></p>
+            <button id="popupCloseButton" onclick="closePopup()">Aceptar</button>
+        </div>
+    </div>
+    
+    <div id="confirmPopupModal" class="modal">
+        <div class="modal-content">
+            <p id="confirmPopupMessage">¿Estás seguro de que quieres reiniciar? Esto borrará los puntos cargados hasta ahora.</p>
+            <button id="confirmPopupYes" onclick="confirmReiniciarAplicacion()">Sí</button>
+            <button id="confirmPopupNo" onclick="closeConfirmPopup()">No</button>
+        </div>
+    </div>
+    
     <div class="header">
         <h1>Liga de Tenis de Mesa</h1>
     
@@ -30,7 +46,6 @@
         <button id="generarCrucesButton" class="button-style" onclick="mostrarPartidos()">Generar cruces</button>
     </div>
     
-
     <div id="partidos" class="container"></div>
 
     <!-- Botón para finalizar la planilla (inicialmente oculto) -->
