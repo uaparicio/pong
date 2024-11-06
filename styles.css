@@ -191,3 +191,12 @@ input:disabled {
 #confirmPopupNo:hover {
     background-color: #bbb;
 }
+
+.header {
+    text-align: center;
+}
+
+.header .logo {
+    max-width: 80px; /* Ajusta el tamaño del logo según sea necesario */
+    margin-bottom: 10px; /* Espacio entre el logo y el título */
+}
