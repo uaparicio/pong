@@ -30,6 +30,10 @@
             padding: 10px;
             text-align: left;
         }
+        th {
+            background-color: #d3d3d3; /* Light gray background for the column header */
+            color: black; /* Black text color for the column header */
+        }
     </style>
 </head>
 <body>
@@ -47,106 +51,38 @@
     </table>
 
     <script>
-        // The list of strings to display
-        const stringList = [
-            "Azeglio, Luciano VS Iglesias, Alejandro",
-"Wengorra, Claudio VS Gil Lemos, Benjamín",
-"Cirella, Jorge VS Agüero, Renzo",
-"Azeglio, Daniel VS Balmaceda, Daniel",
-"Azeglio, Luciano VS Gil Lemos, Benjamín",
-"Cirella, Jorge VS Balmaceda, Daniel",
-"Azeglio, Daniel VS Agüero, Renzo",
-"Wengorra, Claudio VS Furlotti, Alberto",
-"Wengorra, Claudio VS Butarac, José",
-"Azeglio, Daniel VS Mideo, Diego",
-"Azeglio, Daniel VS Domínguez, Agustín",
-"Cirella, Jorge VS Domínguez, Agustín",
-"Azeglio, Luciano VS Agüero, Tiziano",
-"Wengorra, Claudio VS Salcedo, Darío",
-"Gil Lemos, Benjamín VS Valdivia, Ignacio",
-"Balmaceda, Daniel VS Mayer, Jorge",
-"Iglesias, Alejandro VS Valdivia, Ignacio",
-"Balmaceda, Daniel VS Gallegos, Rosauro",
-"Agüero, Renzo VS Domínguez, Juan Carlos",
-"Iglesias, Alejandro VS Domínguez, Agustín",
-"Agüero, Renzo VS Gallegos, Rosauro",
-"Iglesias, Alejandro VS Mandolesi, Agustín",
-"Balmaceda, Daniel VS Salcedo, Darío",
-"Agüero, Renzo VS Agüero, Tiziano",
-"Iglesias, Alejandro VS Cirella, Facundo",
-"Balmaceda, Daniel VS Agüero, Tiziano",
-"Agüero, Renzo VS Salcedo, Darío",
-"Iglesias, Alejandro VS Loncharich, Juan",
-"Furlotti, Alberto VS Valdivia, Ignacio",
-"Butarac, José VS Aparicio, Ulises",
-"Butarac, José VS Valdivia, Ignacio",
-"Mideo, Diego VS Domínguez, Juan Carlos",
-"Butarac, José VS Domínguez, Agustín",
-"Solorza, Pablo VS Domínguez, Juan Carlos",
-"Mideo, Diego VS Gallegos, Rosauro",
-"Butarac, José VS Mandolesi, Agustín",
-"Mideo, Diego VS Agüero, Tiziano",
-"Furlotti, Alberto VS Cirella, Facundo",
-"Aparicio, Ulises VS Gallegos, Rosauro",
-"Valdivia, Ignacio VS Domínguez, Juan Carlos",
-"Valdivia, Ignacio VS Gallegos, Rosauro",
-"Mayer, Jorge VS Domínguez, Agustín",
-"Valdivia, Ignacio VS Agüero, Tiziano",
-"Valdivia, Ignacio VS Salcedo, Darío",
-"Nieva, Sergio VS Loncharich, Juan",
-"Domínguez, Agustín VS Salcedo, Darío",
-"Mandolesi, Agustín VS Agüero, Tiziano",
-"Domínguez, Juan Carlos VS Loncharich, Juan",
-"Domínguez, Agustín VS Agüero, Tiziano",
-"Mandolesi, Agustín VS Salcedo, Darío",
-"Gallegos, Rosauro VS Loncharich, Juan",
-"Azeglio, Luciano - Cirella, Jorge VS Agüero, Renzo - Iglesias, Alejandro",
-"Wengorra, Claudio - Azeglio, Daniel VS Balmaceda, Daniel - Gil Lemos, Benjamín",
-"Azeglio, Luciano - Cirella, Jorge VS Mideo, Diego - Furlotti, Alberto",
-"Azeglio, Luciano - Cirella, Jorge VS Mandolesi, Agustín - Gallegos, Rosauro",
-"Wengorra, Claudio - Azeglio, Daniel VS Domínguez, Agustín - Domínguez, Juan Carlos",
-"Azeglio, Luciano - Cirella, Jorge VS Agüero, Tiziano - Salcedo, Darío",
-"Wengorra, Claudio - Azeglio, Daniel VS Cirella, Facundo - Loncharich, Juan",
-"Balmaceda, Daniel - Gil Lemos, Benjamín VS Mayer, Jorge - Nieva, Sergio",
-"Agüero, Renzo - Iglesias, Alejandro VS Aparicio, Ulises - Valdivia, Ignacio",
-"Balmaceda, Daniel - Gil Lemos, Benjamín VS Mandolesi, Agustín - Gallegos, Rosauro",
-"Agüero, Renzo - Iglesias, Alejandro VS Domínguez, Agustín - Domínguez, Juan Carlos",
-"Balmaceda, Daniel - Gil Lemos, Benjamín VS Agüero, Tiziano - Salcedo, Darío",
-"Agüero, Renzo - Iglesias, Alejandro VS Cirella, Facundo - Loncharich, Juan",
-"Mideo, Diego - Furlotti, Alberto VS Aparicio, Ulises - Valdivia, Ignacio",
-"Solorza, Pablo - Butarac, José VS Mandolesi, Agustín - Gallegos, Rosauro",
-"Solorza, Pablo - Butarac, José VS Agüero, Tiziano - Salcedo, Darío",
-"Aparicio, Ulises - Valdivia, Ignacio VS Mandolesi, Agustín - Gallegos, Rosauro",
-"Mayer, Jorge - Nieva, Sergio VS Domínguez, Agustín - Domínguez, Juan Carlos",
-"Aparicio, Ulises - Valdivia, Ignacio VS Agüero, Tiziano - Salcedo, Darío",
-"Mayer, Jorge - Nieva, Sergio VS Cirella, Facundo - Loncharich, Juan",
-"Domínguez, Agustín - Domínguez, Juan Carlos VS Agüero, Tiziano - Salcedo, Darío",
-"Mandolesi, Agustín - Gallegos, Rosauro VS Cirella, Facundo - Loncharich, Juan"
-        ];
-
-        // Get reference to the table body
-        const tableBody = document.getElementById('tableBody');
+        // Load JSON data from a separate file
+        async function loadMatches() {
+            const response = await fetch('matches.json');
+            const matches = await response.json();
+            return matches;
+        }
 
         // Function to render the list in the table
-        function renderList(filter = "") {
+        function renderList(matches, filter = "") {
+            const tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = ""; // Clear previous content
-            const filteredList = stringList.filter(item => item.toLowerCase().includes(filter.toLowerCase()));
             
-            filteredList.forEach(item => {
+            const filteredList = matches.filter(match => match.status === "Pendiente" && match.name.toLowerCase().includes(filter.toLowerCase()));
+            
+            filteredList.forEach(match => {
                 const row = document.createElement('tr');
                 const cell = document.createElement('td');
-                cell.textContent = item;
+                cell.innerHTML = match.name.replace(/VS/g, '<strong>VS</strong>');
                 row.appendChild(cell);
                 tableBody.appendChild(row);
             });
         }
 
-        // Render the full list initially
-        renderList();
+        // Initialize and render the match list
+        loadMatches().then(matches => {
+            // Render the full list initially
+            renderList(matches);
 
-        // Set up the filter input event listener
-        document.getElementById('filterInput').addEventListener('input', (event) => {
-            renderList(event.target.value);
+            // Set up the filter input event listener
+            document.getElementById('filterInput').addEventListener('input', (event) => {
+                renderList(matches, event.target.value);
+            });
         });
     </script>
 </body>
