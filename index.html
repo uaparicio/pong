@@ -1,61 +1,153 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liga de Tenis de Mesa</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.17/jspdf.plugin.autotable.min.js"></script>
-
+    <title>Filterable List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 100%;
+            margin: auto;
+            box-sizing: border-box;
+        }
+        input[type="text"] {
+            width: calc(100% - 40px);
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
-    
-    <div id="popupModal" class="modal">
-        <div class="modal-content">
-            <p id="popupMessage"></p>
-            <button id="popupCloseButton" onclick="closePopup()">Aceptar</button>
-        </div>
-    </div>
-    
-    <div id="confirmPopupModal" class="modal">
-        <div class="modal-content">
-            <p id="confirmPopupMessage">¿Estás seguro de que quieres reiniciar? Esto borrará los puntos cargados hasta ahora.</p>
-            <button id="confirmPopupYes" onclick="confirmReiniciarAplicacion()">Sí</button>
-            <button id="confirmPopupNo" onclick="closeConfirmPopup()">No</button>
-        </div>
-    </div>
+    <h2>Quiero jugar</h2>
+    <input type="text" id="filterInput" placeholder="Escribí tu nombre">
+    <table id="stringTable">
+        <thead>
+            <tr>
+                <th>Partidos disponibles</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Table rows will be populated here by JavaScript -->
+        </tbody>
+    </table>
 
-    <div class="header">
-        <img src="tmlc.png" alt="Logo de tenis de mesa lujan de cuyo" class="logo">
-        <h1>Liga de Tenis de Mesa</h1>
-    
-        <div class="team-selection">
-            <div id="equipo1-container">
-                <label for="equipo1"></label>
-                <select id="equipo1"></select>
-                <span id="contadorEquipo1"></span>
-            </div>
-            <div id="equipo2-container">
-                <label for="equipo2"></label>
-                <select id="equipo2"></select>
-                <span id="contadorEquipo2"></span>
-            </div>
-        </div>
-    
-        <!-- Botón centrado para generar cruces -->
-        <button id="generarCrucesButton" class="button-style" onclick="mostrarPartidos()">Generar cruces</button>
-    </div>
-    
-    <div id="partidos" class="container"></div>
+    <script>
+        // The list of strings to display
+        const stringList = [
+            "Azeglio, Luciano VS Iglesias, Alejandro",
+"Wengorra, Claudio VS Gil Lemos, Benjamín",
+"Cirella, Jorge VS Agüero, Renzo",
+"Azeglio, Daniel VS Balmaceda, Daniel",
+"Azeglio, Luciano VS Gil Lemos, Benjamín",
+"Cirella, Jorge VS Balmaceda, Daniel",
+"Azeglio, Daniel VS Agüero, Renzo",
+"Wengorra, Claudio VS Furlotti, Alberto",
+"Wengorra, Claudio VS Butarac, José",
+"Azeglio, Daniel VS Mideo, Diego",
+"Azeglio, Daniel VS Domínguez, Agustín",
+"Cirella, Jorge VS Domínguez, Agustín",
+"Azeglio, Luciano VS Agüero, Tiziano",
+"Wengorra, Claudio VS Salcedo, Darío",
+"Gil Lemos, Benjamín VS Valdivia, Ignacio",
+"Balmaceda, Daniel VS Mayer, Jorge",
+"Iglesias, Alejandro VS Valdivia, Ignacio",
+"Balmaceda, Daniel VS Gallegos, Rosauro",
+"Agüero, Renzo VS Domínguez, Juan Carlos",
+"Iglesias, Alejandro VS Domínguez, Agustín",
+"Agüero, Renzo VS Gallegos, Rosauro",
+"Iglesias, Alejandro VS Mandolesi, Agustín",
+"Balmaceda, Daniel VS Salcedo, Darío",
+"Agüero, Renzo VS Agüero, Tiziano",
+"Iglesias, Alejandro VS Cirella, Facundo",
+"Balmaceda, Daniel VS Agüero, Tiziano",
+"Agüero, Renzo VS Salcedo, Darío",
+"Iglesias, Alejandro VS Loncharich, Juan",
+"Furlotti, Alberto VS Valdivia, Ignacio",
+"Butarac, José VS Aparicio, Ulises",
+"Butarac, José VS Valdivia, Ignacio",
+"Mideo, Diego VS Domínguez, Juan Carlos",
+"Butarac, José VS Domínguez, Agustín",
+"Solorza, Pablo VS Domínguez, Juan Carlos",
+"Mideo, Diego VS Gallegos, Rosauro",
+"Butarac, José VS Mandolesi, Agustín",
+"Mideo, Diego VS Agüero, Tiziano",
+"Furlotti, Alberto VS Cirella, Facundo",
+"Aparicio, Ulises VS Gallegos, Rosauro",
+"Valdivia, Ignacio VS Domínguez, Juan Carlos",
+"Valdivia, Ignacio VS Gallegos, Rosauro",
+"Mayer, Jorge VS Domínguez, Agustín",
+"Valdivia, Ignacio VS Agüero, Tiziano",
+"Valdivia, Ignacio VS Salcedo, Darío",
+"Nieva, Sergio VS Loncharich, Juan",
+"Domínguez, Agustín VS Salcedo, Darío",
+"Mandolesi, Agustín VS Agüero, Tiziano",
+"Domínguez, Juan Carlos VS Loncharich, Juan",
+"Domínguez, Agustín VS Agüero, Tiziano",
+"Mandolesi, Agustín VS Salcedo, Darío",
+"Gallegos, Rosauro VS Loncharich, Juan",
+"Azeglio, Luciano - Cirella, Jorge VS Agüero, Renzo - Iglesias, Alejandro",
+"Wengorra, Claudio - Azeglio, Daniel VS Balmaceda, Daniel - Gil Lemos, Benjamín",
+"Azeglio, Luciano - Cirella, Jorge VS Mideo, Diego - Furlotti, Alberto",
+"Azeglio, Luciano - Cirella, Jorge VS Mandolesi, Agustín - Gallegos, Rosauro",
+"Wengorra, Claudio - Azeglio, Daniel VS Domínguez, Agustín - Domínguez, Juan Carlos",
+"Azeglio, Luciano - Cirella, Jorge VS Agüero, Tiziano - Salcedo, Darío",
+"Wengorra, Claudio - Azeglio, Daniel VS Cirella, Facundo - Loncharich, Juan",
+"Balmaceda, Daniel - Gil Lemos, Benjamín VS Mayer, Jorge - Nieva, Sergio",
+"Agüero, Renzo - Iglesias, Alejandro VS Aparicio, Ulises - Valdivia, Ignacio",
+"Balmaceda, Daniel - Gil Lemos, Benjamín VS Mandolesi, Agustín - Gallegos, Rosauro",
+"Agüero, Renzo - Iglesias, Alejandro VS Domínguez, Agustín - Domínguez, Juan Carlos",
+"Balmaceda, Daniel - Gil Lemos, Benjamín VS Agüero, Tiziano - Salcedo, Darío",
+"Agüero, Renzo - Iglesias, Alejandro VS Cirella, Facundo - Loncharich, Juan",
+"Mideo, Diego - Furlotti, Alberto VS Aparicio, Ulises - Valdivia, Ignacio",
+"Solorza, Pablo - Butarac, José VS Mandolesi, Agustín - Gallegos, Rosauro",
+"Solorza, Pablo - Butarac, José VS Agüero, Tiziano - Salcedo, Darío",
+"Aparicio, Ulises - Valdivia, Ignacio VS Mandolesi, Agustín - Gallegos, Rosauro",
+"Mayer, Jorge - Nieva, Sergio VS Domínguez, Agustín - Domínguez, Juan Carlos",
+"Aparicio, Ulises - Valdivia, Ignacio VS Agüero, Tiziano - Salcedo, Darío",
+"Mayer, Jorge - Nieva, Sergio VS Cirella, Facundo - Loncharich, Juan",
+"Domínguez, Agustín - Domínguez, Juan Carlos VS Agüero, Tiziano - Salcedo, Darío",
+"Mandolesi, Agustín - Gallegos, Rosauro VS Cirella, Facundo - Loncharich, Juan"
+        ];
 
-    <!-- Botón para finalizar la planilla (inicialmente oculto) -->
-    <button id="finalizarPlanilla" class="button-style" style="display: none;" onclick="finalizarPlanilla()">Finalizar planilla</button>
-    <!-- Botón para descargar y enviar resultados (inicialmente oculto) -->
-    <button id="generatePDF" class="button-style" style="display: none;" onclick="generarPDF()">Descargar y enviar resultados</button>
-    <!-- Botón para reiniciar la aplicación -->
-    <button id="reiniciarAppButton" class="button-warning" style="display: none;" onclick="reiniciarAplicacion()">Reiniciar aplicación</button>
+        // Get reference to the table body
+        const tableBody = document.getElementById('tableBody');
 
-    <script src="script.js"></script>
+        // Function to render the list in the table
+        function renderList(filter = "") {
+            tableBody.innerHTML = ""; // Clear previous content
+            const filteredList = stringList.filter(item => item.toLowerCase().includes(filter.toLowerCase()));
+            
+            filteredList.forEach(item => {
+                const row = document.createElement('tr');
+                const cell = document.createElement('td');
+                cell.textContent = item;
+                row.appendChild(cell);
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Render the full list initially
+        renderList();
+
+        // Set up the filter input event listener
+        document.getElementById('filterInput').addEventListener('input', (event) => {
+            renderList(event.target.value);
+        });
+    </script>
 </body>
 </html>
