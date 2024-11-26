@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiero jugar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 100%;
+            margin: auto;
+            box-sizing: border-box;
+        }
+        input[type="text"] {
+            width: calc(100% - 40px);
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #d3d3d3; /* Light gray background for the column header */
+            color: black; /* Black text color for the column header */
+        }
+    </style>
+</head>
+<body>
+    <h2>Quiero jugar</h2>
+    <input type="text" id="filterInput" placeholder="Escribí tu nombre">
+    <table id="stringTable">
+        <thead>
+            <tr>
+                <th>Partidos disponibles</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Table rows will be populated here by JavaScript -->
+        </tbody>
+    </table>
+
+    <script>
+        // Load JSON data from a separate file
+        async function loadMatches() {
+            //const response = await fetch('matches.json');
+            //const matches = await response.json();
+            return [
+    { "id": 1, "name": "Azeglio, Luciano VS Iglesias, Alejandro", "status": "Pendiente" },
+    { "id": 2, "name": "Wengorra, Claudio VS Gil Lemos, Benjamín", "status": "Pendiente" },
+    { "id": 3, "name": "Cirella, Jorge VS Agüero, Renzo", "status": "Pendiente" },
+    { "id": 4, "name": "Azeglio, Daniel VS Balmaceda, Daniel", "status": "Pendiente" },
+    { "id": 5, "name": "Azeglio, Luciano VS Gil Lemos, Benjamín", "status": "Pendiente" },
+    { "id": 6, "name": "Cirella, Jorge VS Balmaceda, Daniel", "status": "Pendiente" },
+    { "id": 7, "name": "Azeglio, Daniel VS Agüero, Renzo", "status": "Pendiente" },
+    { "id": 8, "name": "Wengorra, Claudio VS Furlotti, Alberto", "status": "Pendiente" },
+    { "id": 9, "name": "Wengorra, Claudio VS Butarac, José", "status": "Pendiente" },
+    { "id": 10, "name": "Azeglio, Daniel VS Mideo, Diego", "status": "Pendiente" },
+    { "id": 11, "name": "Azeglio, Daniel VS Domínguez, Agustín", "status": "Pendiente" },
+    { "id": 12, "name": "Cirella, Jorge VS Domínguez, Agustín", "status": "Pendiente" },
+    { "id": 13, "name": "Azeglio, Luciano VS Agüero, Tiziano", "status": "Pendiente" },
+    { "id": 14, "name": "Wengorra, Claudio VS Salcedo, Darío", "status": "Pendiente" },
+    { "id": 15, "name": "Gil Lemos, Benjamín VS Valdivia, Ignacio", "status": "Pendiente" },
+    { "id": 16, "name": "Balmaceda, Daniel VS Mayer, Jorge", "status": "Pendiente" },
+    { "id": 17, "name": "Iglesias, Alejandro VS Valdivia, Ignacio", "status": "Pendiente" },
+    { "id": 18, "name": "Balmaceda, Daniel VS Gallegos, Rosauro", "status": "Pendiente" },
+    { "id": 19, "name": "Agüero, Renzo VS Domínguez, Juan Carlos", "status": "Pendiente" },
+    { "id": 20, "name": "Iglesias, Alejandro VS Domínguez, Agustín", "status": "Pendiente" },
+    { "id": 21, "name": "Agüero, Renzo VS Gallegos, Rosauro", "status": "Pendiente" },
+    { "id": 22, "name": "Iglesias, Alejandro VS Mandolesi, Agustín", "status": "Pendiente" },
+    { "id": 23, "name": "Balmaceda, Daniel VS Salcedo, Darío", "status": "Pendiente" },
+    { "id": 24, "name": "Agüero, Renzo VS Agüero, Tiziano", "status": "Pendiente" },
+    { "id": 25, "name": "Iglesias, Alejandro VS Cirella, Facundo", "status": "Pendiente" },
+    { "id": 26, "name": "Balmaceda, Daniel VS Agüero, Tiziano", "status": "Pendiente" },
+    { "id": 27, "name": "Agüero, Renzo VS Salcedo, Darío", "status": "Pendiente" },
+    { "id": 28, "name": "Iglesias, Alejandro VS Loncharich, Juan", "status": "Pendiente" },
+    { "id": 29, "name": "Furlotti, Alberto VS Valdivia, Ignacio", "status": "Pendiente" },
+    { "id": 30, "name": "Butarac, José VS Aparicio, Ulises", "status": "Pendiente" },
+    { "id": 31, "name": "Butarac, José VS Valdivia, Ignacio", "status": "Pendiente" },
+    { "id": 32, "name": "Mideo, Diego VS Domínguez, Juan Carlos", "status": "Pendiente" },
+    { "id": 33, "name": "Butarac, José VS Domínguez, Agustín", "status": "Pendiente" },
+    { "id": 34, "name": "Solorza, Pablo VS Domínguez, Juan Carlos", "status": "Pendiente" },
+    { "id": 35, "name": "Mideo, Diego VS Gallegos, Rosauro", "status": "Pendiente" },
+    { "id": 36, "name": "Butarac, José VS Mandolesi, Agustín", "status": "Pendiente" },
+    { "id": 37, "name": "Mideo, Diego VS Agüero, Tiziano", "status": "Pendiente" },
+    { "id": 38, "name": "Furlotti, Alberto VS Cirella, Facundo", "status": "Pendiente" },
+    { "id": 39, "name": "Aparicio, Ulises VS Gallegos, Rosauro", "status": "Pendiente" },
+    { "id": 40, "name": "Valdivia, Ignacio VS Domínguez, Juan Carlos", "status": "Pendiente" },
+    { "id": 41, "name": "Valdivia, Ignacio VS Gallegos, Rosauro", "status": "Pendiente" },
+    { "id": 42, "name": "Mayer, Jorge VS Domínguez, Agustín", "status": "Pendiente" },
+    { "id": 43, "name": "Valdivia, Ignacio VS Agüero, Tiziano", "status": "Pendiente" },
+    { "id": 44, "name": "Valdivia, Ignacio VS Salcedo, Darío", "status": "Pendiente" },
+    { "id": 45, "name": "Nieva, Sergio VS Loncharich, Juan", "status": "Pendiente" },
+    { "id": 46, "name": "Domínguez, Agustín VS Salcedo, Darío", "status": "Pendiente" },
+    { "id": 47, "name": "Mandolesi, Agustín VS Agüero, Tiziano", "status": "Pendiente" },
+    { "id": 48, "name": "Domínguez, Juan Carlos VS Loncharich, Juan", "status": "Pendiente" },
+    { "id": 49, "name": "Domínguez, Agustín VS Agüero, Tiziano", "status": "Pendiente" },
+    { "id": 50, "name": "Mandolesi, Agustín VS Salcedo, Darío", "status": "Pendiente" },
+    { "id": 51, "name": "Gallegos, Rosauro VS Loncharich, Juan", "status": "Pendiente" },
+    { "id": 52, "name": "Azeglio, Luciano - Cirella, Jorge VS Agüero, Renzo - Iglesias, Alejandro", "status": "Pendiente" },
+    { "id": 53, "name": "Wengorra, Claudio - Azeglio, Daniel VS Balmaceda, Daniel - Gil Lemos, Benjamín", "status": "Pendiente" },
+    { "id": 54, "name": "Azeglio, Luciano - Cirella, Jorge VS Mideo, Diego - Furlotti, Alberto", "status": "Pendiente" },
+    { "id": 55, "name": "Azeglio, Luciano - Cirella, Jorge VS Mandolesi, Agustín - Gallegos, Rosauro", "status": "Pendiente" },
+    { "id": 56, "name": "Wengorra, Claudio - Azeglio, Daniel VS Domínguez, Agustín - Domínguez, Juan Carlos", "status": "Pendiente" },
+    { "id": 57, "name": "Azeglio, Luciano - Cirella, Jorge VS Agüero, Tiziano - Salcedo, Darío", "status": "Pendiente" },
+    { "id": 58, "name": "Wengorra, Claudio - Azeglio, Daniel VS Cirella, Facundo - Loncharich, Juan", "status": "Pendiente" },
+    { "id": 59, "name": "Balmaceda, Daniel - Gil Lemos, Benjamín VS Mayer, Jorge - Nieva, Sergio", "status": "Pendiente" },
+    { "id": 60, "name": "Agüero, Renzo - Iglesias, Alejandro VS Aparicio, Ulises - Valdivia, Ignacio", "status": "Pendiente" },
+    { "id": 61, "name": "Balmaceda, Daniel - Gil Lemos, Benjamín VS Mandolesi, Agustín - Gallegos, Rosauro", "status": "Pendiente" },
+    { "id": 62, "name": "Agüero, Renzo - Iglesias, Alejandro VS Domínguez, Agustín - Domínguez, Juan Carlos", "status": "Pendiente" },
+    { "id": 63, "name": "Balmaceda, Daniel - Gil Lemos, Benjamín VS Agüero, Tiziano - Salcedo, Darío", "status": "Pendiente" },
+    { "id": 64, "name": "Agüero, Renzo - Iglesias, Alejandro VS Cirella, Facundo - Loncharich, Juan", "status": "Pendiente" },
+    { "id": 65, "name": "Mideo, Diego - Furlotti, Alberto VS Aparicio, Ulises - Valdivia, Ignacio", "status": "Pendiente" },
+    { "id": 66, "name": "Solorza, Pablo - Butarac, José VS Mandolesi, Agustín - Gallegos, Rosauro", "status": "Pendiente" },
+    { "id": 67, "name": "Solorza, Pablo - Butarac, José VS Agüero, Tiziano - Salcedo, Darío", "status": "Pendiente" },
+    { "id": 68, "name": "Aparicio, Ulises - Valdivia, Ignacio VS Mandolesi, Agustín - Gallegos, Rosauro", "status": "Pendiente" },
+    { "id": 69, "name": "Mayer, Jorge - Nieva, Sergio VS Domínguez, Agustín - Domínguez, Juan Carlos", "status": "Pendiente" },
+    { "id": 70, "name": "Aparicio, Ulises - Valdivia, Ignacio VS Agüero, Tiziano - Salcedo, Darío", "status": "Pendiente" },
+    { "id": 71, "name": "Mayer, Jorge - Nieva, Sergio VS Cirella, Facundo - Loncharich, Juan", "status": "Pendiente" },
+    { "id": 72, "name": "Domínguez, Agustín - Domínguez, Juan Carlos VS Agüero, Tiziano - Salcedo, Darío", "status": "Pendiente" },
+    { "id": 73, "name": "Mandolesi, Agustín - Gallegos, Rosauro VS Cirella, Facundo - Loncharich, Juan", "status": "Pendiente" }
+];
+        }
+
+        // Function to render the list in the table
+        function renderList(matches, filter = "") {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = ""; // Clear previous content
+            
+            const filteredList = matches.filter(match => match.status === "Pendiente" && match.name.toLowerCase().includes(filter.toLowerCase()));
+            
+            filteredList.forEach(match => {
+                const row = document.createElement('tr');
+                const cell = document.createElement('td');
+                cell.innerHTML = match.name.replace(/VS/g, '<strong>VS</strong>');
+                row.appendChild(cell);
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Initialize and render the match list
+        loadMatches().then(matches => {
+            // Render the full list initially
+            renderList(matches);
+
+            // Set up the filter input event listener
+            document.getElementById('filterInput').addEventListener('input', (event) => {
+                renderList(matches, event.target.value);
+            });
+        });
+    </script>
+</body>
+</html>
