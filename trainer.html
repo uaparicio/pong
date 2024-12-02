@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Running Timer</title>
+  <title>Temporizador de Entrenamiento</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -68,26 +68,26 @@
 </head>
 <body>
   <div class="container">
-    <h1>Running Timer</h1>
-    <div class="timer" id="timer-display">Ready</div>
+    <h1>Temporizador de Entrenamiento</h1>
+    <div class="timer" id="timer-display">Listo</div>
     <div class="progress-bar">
       <div class="progress" id="progress-bar"></div>
     </div>
     <ul class="exercise-list" id="exercise-list">
-      <!-- Exercise list -->
+      <!-- Lista de ejercicios -->
     </ul>
-    <button class="button" id="start-button">Start</button>
-    <button class="button" id="pause-button" style="display:none;">Pause</button>
-    <button class="button" id="test-speech-button">Test Speech</button>
+    <button class="button" id="start-button">Iniciar</button>
+    <button class="button" id="pause-button" style="display:none;">Pausa</button>
+    <button class="button" id="test-speech-button">Probar Voz</button>
   </div>
 
   <script>
     const routine = [
-      { type: "Walking", duration: 15 },
-      { type: "Jogging", duration: 15 },
-      { type: "Walking", duration: 15 },
-      { type: "Jogging", duration: 15 },
-      { type: "Walking", duration: 15 },
+      { type: "Caminata", duration: 15 },
+      { type: "Trote", duration: 15 },
+      { type: "Caminata", duration: 15 },
+      { type: "Trote", duration: 15 },
+      { type: "Caminata", duration: 15 },
     ];
 
     let currentIndex = 0;
@@ -130,7 +130,7 @@
         } else {
           clearInterval(countdownInterval);
           beep.play();
-          setTimerDisplay("Go!", false);
+          setTimerDisplay("¡Adelante!", false);
           setTimeout(() => {
             announceExercise(routine[currentIndex].type);
             startExercise();
@@ -142,7 +142,7 @@
 
     function startExercise() {
       if (currentIndex >= routine.length) {
-        setTimerDisplay("Routine completed!", false);
+        setTimerDisplay("¡Rutina completada!", false);
         progressBar.style.width = "100%";
         startButton.disabled = false;
         pauseButton.style.display = "none";
@@ -163,7 +163,7 @@
         updateTimerDisplay(type, remainingTime, duration);
 
         if (remainingTime === 10) {
-          announceTime("ten seconds left");
+          announceTime("quedan diez segundos");
         }
 
         if ([3, 2, 1].includes(remainingTime)) {
@@ -231,17 +231,17 @@
 
       if (isPaused) {
         clearInterval(interval);
-        pauseButton.textContent = "Play";
-        setTimerDisplay("Paused", false);
+        pauseButton.textContent = "Reanudar";
+        setTimerDisplay("Pausado", false);
       } else {
-        pauseButton.textContent = "Pause";
+        pauseButton.textContent = "Pausa";
         isPaused = false; // Asegurarse de reiniciar `isPaused` correctamente.
         interval = setInterval(() => {
           remainingTime--;
           updateTimerDisplay(routine[currentIndex].type, remainingTime, routine[currentIndex].duration);
 
           if (remainingTime === 10) {
-            announceTime("ten seconds left");
+            announceTime("quedan diez segundos");
           }
 
           if ([3, 2, 1].includes(remainingTime)) {
@@ -264,7 +264,7 @@
 
     // Botón de prueba para el sintetizador de voz
     testSpeechButton.addEventListener("click", () => {
-      const message = new SpeechSynthesisUtterance("This is a test of the speech synthesis.");
+      const message = new SpeechSynthesisUtterance("Esta es una prueba del sintetizador de voz.");
       window.speechSynthesis.speak(message);
     });
   </script>
