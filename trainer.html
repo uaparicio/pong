@@ -78,6 +78,7 @@
     </ul>
     <button class="button" id="start-button">Start</button>
     <button class="button" id="pause-button" style="display:none;">Pause</button>
+    <button class="button" id="test-speech-button">Test Speech</button>
   </div>
 
   <script>
@@ -100,6 +101,7 @@
     const exerciseListElement = document.getElementById("exercise-list");
     const startButton = document.getElementById("start-button");
     const pauseButton = document.getElementById("pause-button");
+    const testSpeechButton = document.getElementById("test-speech-button");
 
     // Declara el sonido globalmente
     const beep = new Audio("beep.mp3");
@@ -258,6 +260,12 @@
           }
         }, 1000);
       }
+    });
+
+    // Botón de prueba para el sintetizador de voz
+    testSpeechButton.addEventListener("click", () => {
+      const message = new SpeechSynthesisUtterance("This is a test of the speech synthesis.");
+      window.speechSynthesis.speak(message);
     });
   </script>
 </body>
