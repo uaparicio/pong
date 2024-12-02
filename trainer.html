@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Running Timer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      padding: 20px;
+    }
+    .timer {
+      font-size: 48px;
+      margin: 20px 0;
+    }
+    .progress-bar {
+      width: 80%;
+      height: 20px;
+      background-color: #ddd;
+      margin: 10px auto;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress {
+      height: 100%;
+      width: 0;
+      background-color: #4caf50;
+      transition: width 1s linear;
+    }
+    .button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .exercise-list {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .exercise-list li {
+      font-size: 18px;
+      margin: 5px 0;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .completed {
+      background-color: #d4edda;
+      text-decoration: line-through;
+      color: #155724;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Running Timer</h1>
+    <div class="timer" id="timer-display">Ready</div>
+    <div class="progress-bar">
+      <div class="progress" id="progress-bar"></div>
+    </div>
+    <ul class="exercise-list" id="exercise-list">
+      <!-- Exercise list -->
+    </ul>
+    <button class="button" id="start-button">Start</button>
+    <button class="button" id="pause-button" style="display:none;">Pause</button>
+  </div>
+
+  <script>
+    const routine = [
+      { type: "Walking", duration: 15 },
+      { type: "Jogging", duration: 15 },
+      { type: "Walking", duration: 15 },
+      { type: "Jogging", duration: 15 },
+      { type: "Walking", duration: 15 },
+    ];
+
+    let currentIndex = 0;
+    let interval;
+    let countdownInterval;
+    let remainingTime = 0;
+    let isPaused = false;
+
+    const timerDisplay = document.getElementById("timer-display");
+    const progressBar = document.getElementById("progress-bar");
+    const exerciseListElement = document.getElementById("exercise-list");
+    const startButton = document.getElementById("start-button");
+    const pauseButton = document.getElementById("pause-button");
+
+    // Declara el sonido globalmente
+    const beep = new Audio("beep.mp3");
+
+    // Inicializa la lista de ejercicios
+    function initializeExerciseList() {
+      exerciseListElement.innerHTML = '';
+      routine.forEach((exercise, index) => {
+        const listItem = document.createElement("li");
+        listItem.id = `exercise-${index}`;
+        listItem.textContent = `${exercise.type} - ${formatTime(exercise.duration)}`;
+        exerciseListElement.appendChild(listItem);
+      });
+    }
+
+    function startRoutine() {
+      startButton.disabled = true;
+      setTimerDisplay("3");
+      let countdown = 3;
+
+      countdownInterval = setInterval(() => {
+        if (countdown > 1) {
+          beep.play();
+          countdown--;
+          setTimerDisplay(countdown.toString(), true); // Solo anunciar cuando queden "3, 2, 1" segundos
+        } else {
+          clearInterval(countdownInterval);
+          beep.play();
+          setTimerDisplay("Go!", false);
+          setTimeout(() => {
+            announceExercise(routine[currentIndex].type);
+            startExercise();
+            pauseButton.style.display = "inline-block";
+          }, 1000);
+        }
+      }, 1000);
+    }
+
+    function startExercise() {
+      if (currentIndex >= routine.length) {
+        setTimerDisplay("Routine completed!", false);
+        progressBar.style.width = "100%";
+        startButton.disabled = false;
+        pauseButton.style.display = "none";
+        return;
+      }
+
+      const { type, duration } = routine[currentIndex];
+      if (!isPaused) {
+        remainingTime = duration;
+      }
+
+      updateTimerDisplay(type, remainingTime, duration);
+
+      interval = setInterval(() => {
+        if (isPaused) return;
+
+        remainingTime--;
+        updateTimerDisplay(type, remainingTime, duration);
+
+        if (remainingTime === 10) {
+          announceTime("ten seconds left");
+        }
+
+        if ([3, 2, 1].includes(remainingTime)) {
+          beep.play();
+          announceTime(`${remainingTime}`);
+        }
+
+        if (remainingTime === 0) {
+          clearInterval(interval);
+          markExerciseCompleted(currentIndex);
+          currentIndex++;
+          if (currentIndex < routine.length) {
+            announceExercise(routine[currentIndex].type);
+          }
+          startExercise();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay(type, remainingTime, duration) {
+      timerDisplay.innerText = `${type}: ${formatTime(remainingTime)}`;
+      progressBar.style.width = `${((duration - remainingTime) / duration) * 100}%`;
+    }
+
+    function markExerciseCompleted(index) {
+      const listItem = document.getElementById(`exercise-${index}`);
+      if (listItem) {
+        listItem.classList.add("completed");
+      }
+    }
+
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${minutes}:${secs < 10 ? "0" + secs : secs}`;
+    }
+
+    // Función para anunciar el ejercicio utilizando la API de síntesis de voz
+    function announceExercise(exercise) {
+      const message = new SpeechSynthesisUtterance(exercise);
+      window.speechSynthesis.speak(message);
+    }
+
+    // Función para anunciar el tiempo específico
+    function announceTime(message) {
+      const speechMessage = new SpeechSynthesisUtterance(message);
+      window.speechSynthesis.speak(speechMessage);
+    }
+
+    // Función para actualizar la pantalla del cronómetro y opcionalmente anunciar el mensaje
+    function setTimerDisplay(message, shouldAnnounce = false) {
+      timerDisplay.innerText = message;
+      if (shouldAnnounce) {
+        announceTime(message);
+      }
+    }
+
+    startButton.addEventListener("click", () => {
+      initializeExerciseList();
+      startRoutine();
+    });
+
+    pauseButton.addEventListener("click", () => {
+      isPaused = !isPaused;
+
+      if (isPaused) {
+        clearInterval(interval);
+        pauseButton.textContent = "Play";
+        setTimerDisplay("Paused", false);
+      } else {
+        pauseButton.textContent = "Pause";
+        isPaused = false; // Asegurarse de reiniciar `isPaused` correctamente.
+        interval = setInterval(() => {
+          remainingTime--;
+          updateTimerDisplay(routine[currentIndex].type, remainingTime, routine[currentIndex].duration);
+
+          if (remainingTime === 10) {
+            announceTime("ten seconds left");
+          }
+
+          if ([3, 2, 1].includes(remainingTime)) {
+            beep.play();
+            announceTime(`${remainingTime}`);
+          }
+
+          if (remainingTime === 0) {
+            clearInterval(interval);
+            markExerciseCompleted(currentIndex);
+            currentIndex++;
+            if (currentIndex < routine.length) {
+              announceExercise(routine[currentIndex].type);
+            }
+            startExercise();
+          }
+        }, 1000);
+      }
+    });
+  </script>
+</body>
+</html>
